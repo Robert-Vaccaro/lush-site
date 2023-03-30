@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.11",
+    "@mui/material": "^5.11.14",
+    "cookies-next": "^2.1.1",
+    "moment": "^2.29.4",
+    "next": "latest",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
+}
