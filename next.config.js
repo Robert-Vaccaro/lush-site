@@ -2,7 +2,7 @@
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
-  assetPrefix: isProd ? '/your-github-repo-name/' : '',
+  assetPrefix: isProd ? '/lush-site/' : '',
   images: {
     unoptimized: true,
   },
