@@ -77,20 +77,16 @@ export default function CollapsibleTable() {
             <TableCell align="right">First</TableCell>
             <TableCell align="right">Last</TableCell>
             <TableCell align="right">Paid</TableCell>
-            
-
           </TableRow>
         </TableHead>
         <TableBody>
-          {
-            users===0?
+          {users ===0 ? (
             <div></div>
-            :
-          users.map((row) => (
-            <Row key={row._id} row={row} />
-          ))
-          
-          }
+          ) : (
+            users.map((row) => (
+              <Row key={row._id} row={row} />
+            )
+          ))}
         </TableBody>
       </Table>
       <TablePagination

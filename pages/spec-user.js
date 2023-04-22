@@ -88,7 +88,7 @@ export default function SpecUser() {
                   .format("dddd, MMMM Do, YYYY h:mm:ss A")}
               </Typography>
               <Typography>
-                Last Login
+                Last Login:{' '}
                 {moment
                   .unix(user.lastLogin)
                   .format("dddd, MMMM Do, YYYY h:mm:ss A")}
@@ -99,7 +99,7 @@ export default function SpecUser() {
                   .unix(user.updatedAt)
                   .format("dddd, MMMM Do, YYYY h:mm:ss A")}
               </Typography>
-              <Typography>DB ID: {user._id}</Typography>
+              <Typography>Database ID: {user._id}</Typography>
               <Typography>
                 Paid: {user.paid === undefined ? "" : user.paid.toString()}
               </Typography>
