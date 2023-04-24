@@ -1,36 +1,33 @@
-import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
+import {useState} from 'react';
+import {Paper, InputBase, IconButton} from '@mui/material'
+import {Search} from '@mui/icons-material';
 
-export default function CustomizedInputBase(props) {
-    let [newVal, setNewVal] = React.useState([]);
+export default function CustomizedInputBase({updatedListProp}) {
+    let [newVal, setNewVal] = useState([]);
     const changeVal = (val) => {
       if (val === ""){
-        props.updatedListProp(val)
-      } else {
-        setNewVal(val)
-      }
+        updatedListProp(val)
+      } 
+      setNewVal(val)
     }
-    const sumbitForm = (e) => {
+    const submitForm = (e) => {
       e.preventDefault();
-      props.updatedListProp(newVal)
+      updatedListProp(newVal)
     }
   return (
     <Paper
       component="form"
-      onSubmit={(e) => sumbitForm(e)}
-      sx={{ display: 'flex', alignItems: 'center', width: "50%",marginTop:"75px"}}
+      onSubmit={(e) => submitForm(e)}
+      sx={{ display: 'flex', width: "50%", marginTop:"75px"}}
     >
       <InputBase
-        sx={{ ml: 1, flex: 1}}
-        placeholder="Search User Database"
+        sx={{ ml: 1, flex: 1, mt: '6px' }}
+        placeholder="Search"
         inputProps={{ 'aria-label': 'search google maps' }}
         onChange={(e) => changeVal(e.target.value)}
       />
-      <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={(e) => {e.preventDefault();props.updatedListProp(newVal)}}>
-        <SearchIcon />
+      <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={(e) => {submitForm(e)}}>
+        <Search />
       </IconButton>
     </Paper>
   );

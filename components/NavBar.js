@@ -6,29 +6,22 @@ import { useRouter } from 'next/navigation';
 
 const drawerWidth = 240;
 
-const transitionEnteringScreen = (theme) => {
-  transition: theme.transitions.create('width', {
+const transition = (theme, properties, duration) => ({
+  transition: theme.transitions.create(properties.join(','), {
     easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-}
-
-const transitionLeavingScreen = (theme) => ({
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
+    duration: duration,
   }),
 })
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
-  ...(transitionEnteringScreen(theme)),
+  ...transition(theme, ['width'], theme.transitions.duration.enteringScreen),
   overflowX: 'hidden',
 });
 
 const closedMixin = (theme) => ({
-  ...(transitionLeavingScreen(theme)),
   overflowX: 'hidden',
+  ...transition(theme, ['width'], theme.transitions.duration.leavingScreen),
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
@@ -44,21 +37,14 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-const CustomAppBar = styled(AppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
+const CustomAppBar = styled(AppBar, {shouldForwardProp: (prop) => prop !== 'open',})(
+  ({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
+  ...(transition(theme, ['width', 'margin'], theme.transitions.duration.leavingScreen)),
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    ...(transition(theme, ['width', 'margin'], theme.transitions.duration.enteringScreen)),
   }),
 }));
 
