@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {Card, CardActions, CardContent, Button, Typography} from '@mui/material'
+import {Card, CardActions, CardContent, Button, Typography, CardMedia} from '@mui/material'
 import moment from "moment";
 import ChangePrompt from "../components/ChangePrompt";
 import ChangeResStr from "../components/ChangeResStr";
@@ -10,13 +10,14 @@ import { getCookie } from "cookies-next";
 export default function SpecUser() {
   const router = useRouter();
 
-  let [user, setUser] = useState([]);
-  let [messages, setMessages] = useState([]);
+  let [girl, setGirl] = useState([]);
+  let [startMessages, setStartMessages] = useState([]);
   let [updatePage, setUpdatePage] = useState(true);
   const updateUsersPage = () => {
     console.log("should reload");
     setUpdatePage(true);
   };
+
   const getSpecificUser = (appleID) => {
     fetch("https://intense-brook-83972.herokuapp.com/get-user", {
       method: "post",
@@ -51,8 +52,8 @@ export default function SpecUser() {
   };
   useEffect(() => {
     if (router.isReady && updatePage) {
-      getSpecificUser(router.query.user);
-      getUserMessages(router.query.user);
+      getSpecificGirl(router.query.girl);
+      getGirlStartMessages(router.query.girl);
     }
   }, [router.isReady, updatePage]);
   return (
@@ -61,51 +62,30 @@ export default function SpecUser() {
         <div></div>
       ) : (
         <div>
-          <Button size="small" onClick={() => router.push("/dashboard")}>
+          <Button size="small" onClick={() => router.push("/girls")}>
             Back
           </Button>
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
               <Typography variant="h5">
-                <u>User Information</u>
+                <u>Girl Information</u>
               </Typography>
-              <Typography>Username: {user.username}</Typography>
-              <Typography>AppleID: {user.appleID}</Typography>
-              <Typography>Email Address: {user.email_address}</Typography>
-              <Typography>First name: {user.firstName}</Typography>
-              <Typography>Last name: {user.lastName}</Typography>
+              <Typography>Profile Pic:
+				<CardMedia component='img' src={girl.profilePic} sx={{ width: '50px', height: 'auto' }}/>
+			  </Typography>
+              <Typography>Girl Name: {girl.girlName}</Typography>
+              <Typography>Girl Handle: {girl.girlHandle}</Typography>
+              <Typography>User Count: {girl.userCount}</Typography>
               <Typography>
                 Created:{" "}
                 {moment
-                  .unix(user.createdAt)
+                  .unix(girl.createdAt)
                   .format("dddd, MMMM Do, YYYY h:mm:ss A")}
               </Typography>
-              <Typography>
-                Last Login:{' '}
-                {moment
-                  .unix(user.lastLogin)
-                  .format("dddd, MMMM Do, YYYY h:mm:ss A")}
-              </Typography>
-              <Typography>
-                Updated:{" "}
-                {moment
-                  .unix(user.updatedAt)
-                  .format("dddd, MMMM Do, YYYY h:mm:ss A")}
-              </Typography>
-              <Typography>Database ID: {user._id}</Typography>
-              <Typography>
-                Paid: {user.paid === undefined ? "" : user.paid.toString()}
-              </Typography>
-              <Typography>
-                Banned:{" "}
-                {user.banned === undefined ? "" : user.banned.toString()}
-              </Typography>
-              <Typography>
-                Is AI On: {user.isAI === undefined ? "" : user.isAI.toString()}
-              </Typography>
-              <Typography>Messages: {user.messageCount}</Typography>
-              <Typography>Prompt: {user.prompt}</Typography>
-              <Typography>Response String: {user.responseStr}</Typography>
+              <Typography>Database ID: {girl._id}</Typography>
+              <Typography>Messages: {girl.messageCount}</Typography>
+              <Typography>Last Message: {girl.lastMessage}</Typography>
+              <Typography>Subscribe Message: {girl.subscribeMessage}</Typography>
             </CardContent>
             <CardActions>
               <ChangePrompt
