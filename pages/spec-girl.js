@@ -1,25 +1,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {Card, CardActions, CardContent, Button, Typography, CardMedia} from '@mui/material'
+import {Card, CardActions, CardContent, Button, Typography, CardMedia, ImageList, ImageListItem} from '@mui/material'
 import moment from "moment";
-import ChangePrompt from "../components/ChangePrompt";
-import ChangeResStr from "../components/ChangeResStr";
-import BanUser from "../components/BanUser";
 import { getCookie } from "cookies-next";
 
-export default function SpecUser() {
+export default function SpecGirl() {
   const router = useRouter();
 
   let [girl, setGirl] = useState([]);
-  let [startMessages, setStartMessages] = useState([]);
-  let [updatePage, setUpdatePage] = useState(true);
-  const updateUsersPage = () => {
-    console.log("should reload");
-    setUpdatePage(true);
-  };
 
-  const getSpecificUser = (appleID) => {
-    fetch("https://intense-brook-83972.herokuapp.com/get-user", {
+  const getSpecificGirl = (girlHandle) => {
+    fetch("https://intense-brook-83972.herokuapp.com/get-girl", {
       method: "post",
       headers: {
         Authorization: getCookie("token"),
@@ -28,37 +19,21 @@ export default function SpecUser() {
       },
       body: JSON.stringify({
         username: getCookie("username"),
-        appleID: appleID,
+        girlHandle: girlHandle,
       }),
     })
       .then((res) => res.json())
-      .then((res) => setUser(res))
+      .then((res) => setGirl(res))
       .catch((err) => console.log(err));
-  };
-  const getUserMessages = (appleID) => {
-    fetch("https://intense-brook-83972.herokuapp.com/admin-get-messages", {
-      method: "post",
-      headers: {
-        'Authorization': getCookie('token'), 
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({username:getCookie("username"), appleID: appleID }),
-    })
-      .then((res) => res.json())
-      .then((res) => setMessages(res))
-      .catch((err) => console.log(err));
-    setUpdatePage(false);
   };
   useEffect(() => {
-    if (router.isReady && updatePage) {
+    if (router.isReady) {
       getSpecificGirl(router.query.girl);
-      getGirlStartMessages(router.query.girl);
     }
-  }, [router.isReady, updatePage]);
+  }, [router.isReady]);
   return (
     <div>
-      {user.length === 0 ? (
+      {girl.length === 0 ? (
         <div></div>
       ) : (
         <div>
@@ -70,58 +45,51 @@ export default function SpecUser() {
               <Typography variant="h5">
                 <u>Girl Information</u>
               </Typography>
-              <Typography>Profile Pic:
-				<CardMedia component='img' src={girl.profilePic} sx={{ width: '50px', height: 'auto' }}/>
-			  </Typography>
+              <Typography>Database ID: {girl._id}</Typography>
               <Typography>Girl Name: {girl.girlName}</Typography>
               <Typography>Girl Handle: {girl.girlHandle}</Typography>
-              <Typography>User Count: {girl.userCount}</Typography>
+              <Typography>Last Message: {girl.lastMessage}</Typography>
+              <Typography>Profile Pic:
+                <CardMedia component='img' src={girl.profilePic} sx={{ width: '50px', height: 'auto' }}/>
+              </Typography>
               <Typography>
                 Created:{" "}
                 {moment
                   .unix(girl.createdAt)
                   .format("dddd, MMMM Do, YYYY h:mm:ss A")}
               </Typography>
-              <Typography>Database ID: {girl._id}</Typography>
-              <Typography>Messages: {girl.messageCount}</Typography>
-              <Typography>Last Message: {girl.lastMessage}</Typography>
+              <Typography>User Count: {girl.userCount}</Typography>
+              <Typography>Messages Count: {girl.messageCount}</Typography>
               <Typography>Subscribe Message: {girl.subscribeMessage}</Typography>
             </CardContent>
-            <CardActions>
-              <ChangePrompt
-                appleID={router.query.user}
-                changeUser={updateUsersPage}
-              />
-              <ChangeResStr
-                appleID={router.query.user}
-                changeUser={updateUsersPage}
-              />
-              <BanUser
-                appleID={router.query.user}
-                currentBanStatus={user.banned}
-                changeUser={updateUsersPage}
-              />
-            </CardActions>
           </Card>
+          <br></br>
+			<Typography>
+				<ImageList cols={girl.images.length} rowHeight={150}>
+					{girl.images === 0 ? "" :
+						girl.images.map((image, index) => {
+							<ImageListItem key={index}>
+								<CardMedia component='img' src={image} sx={{ width: 'auto', height: '145' }}/>
+							</ImageListItem>
+						})
+					}
+				</ImageList>
+			</Typography>
           <br></br>
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
-              <Typography variant="h5">Messages</Typography>
+              <Typography variant="h5">Start Messages</Typography>
               <br></br>
-              {messages.length === 0
-                ? ""
-                : messages.map((message, i) => (
-                    <Typography key={i}>
+              {girl.startMessages.length === 0 ? ""
+                : girl.startMessages.map((message, index) => (
+                    <Typography key={index}>
                       <u>
-                        <b>{message.sentFrom}</b>
+                        <b>{index}</b>
                       </u>
-                      : {message.message}
+                      : {message}
                     </Typography>
                   ))}
             </CardContent>
-            <CardActions>
-              <Button size="small">Delete Chat</Button>
-            </CardActions>
           </Card>
         </div>
       )}

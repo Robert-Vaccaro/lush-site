@@ -13,10 +13,6 @@ export default function SpecUser() {
   let [user, setUser] = useState([]);
   let [messages, setMessages] = useState([]);
   let [updatePage, setUpdatePage] = useState(true);
-  const updateUsersPage = () => {
-    console.log("should reload");
-    setUpdatePage(true);
-  };
   const getSpecificUser = (appleID) => {
     fetch("https://intense-brook-83972.herokuapp.com/get-user", {
       method: "post",
@@ -50,7 +46,7 @@ export default function SpecUser() {
     setUpdatePage(false);
   };
   useEffect(() => {
-    if (router.isReady && updatePage) {
+    if (router.isReady) {
       getSpecificUser(router.query.user);
       getUserMessages(router.query.user);
     }
@@ -110,16 +106,17 @@ export default function SpecUser() {
             <CardActions>
               <ChangePrompt
                 appleID={router.query.user}
-                changeUser={updateUsersPage}
+                changeUser={() =>  setUpdatePage(!updatePage)}
+				previousPrompt={user.prompt}
               />
               <ChangeResStr
                 appleID={router.query.user}
-                changeUser={updateUsersPage}
+                changeUser={() =>  setUpdatePage(!updatePage)}
               />
               <BanUser
                 appleID={router.query.user}
                 currentBanStatus={user.banned}
-                changeUser={updateUsersPage}
+                changeUser={() =>  setUpdatePage(!updatePage)}
               />
             </CardActions>
           </Card>

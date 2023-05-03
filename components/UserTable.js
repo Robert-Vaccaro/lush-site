@@ -6,6 +6,9 @@ import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { getCookie } from 'cookies-next';
 
+//TODO:
+  // Add scrolling with lazy loading
+
 export default function CollapsibleTable() {
     let [users, setUsers] = useState([]);
     let [totalUsers, setTotalUsers] = useState(0);
@@ -53,7 +56,7 @@ export default function CollapsibleTable() {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Photo</TableCell>
+            <TableCell>Apple ID</TableCell>
             <TableCell align="right">Username</TableCell>
             <TableCell align="right">First</TableCell>
             <TableCell align="right">Last</TableCell>
