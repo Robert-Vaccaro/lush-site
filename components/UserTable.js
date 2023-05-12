@@ -1,24 +1,13 @@
-import {useEffect, useState, Fragment} from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import TablePagination from '@mui/material/TablePagination';
+import {useEffect, useState} from 'react';
+import {Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, TablePagination} from '@mui/material'
+import {KeyboardArrowDown, KeyboardArrowUp, Edit} from '@mui/icons-material'
 import SearchBar from "../components/SearchBar"
 import moment from 'moment';
-import { Edit } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { getCookie } from 'cookies-next';
+
+//TODO:
+  // Add scrolling with lazy loading
 
 export default function CollapsibleTable() {
     let [users, setUsers] = useState([]);
@@ -27,26 +16,21 @@ export default function CollapsibleTable() {
     let [page, setPage] = useState(0);
     let [searchTerm, setSearchTerm] = useState("");
 
-    var updatedUserList = (newSearchTerm) => {
-        setSearchTerm(newSearchTerm)
-    }
     var setUserList = (res) => {
-        console.log(res)
         setTotalUsers(res.total)
         setUsers(res.data)
     }
     var handleChangePage = (e) => {
-      if ((e.target.getAttribute("data-testid") === "KeyboardArrowRightIcon") && (page <= Math.floor(totalUsers/perPage))) {
+      if (e.target.getAttribute("data-testid") === "KeyboardArrowRightIcon") {
         setPage(page += 1)
-      } else if ((e.target.getAttribute("data-testid") === "KeyboardArrowLeftIcon") && (page >= 0)) {
+      } else if ((e.target.getAttribute("data-testid") === "KeyboardArrowLeftIcon")) {
         setPage(page -= 1)
       }      
     }
-
     var handleChangeRowsPerPage = (e) => {
       setPerPage(e.target.value)
+      setPage(0)
     }
-
     const getUsers = () => {
         fetch('https://intense-brook-83972.herokuapp.com/get-users', {
             method: 'post', 
@@ -63,76 +47,47 @@ export default function CollapsibleTable() {
       };
     useEffect(() => {
         getUsers()
-      }, [searchTerm,page,perPage]);
+      }, [searchTerm, page, perPage]);
   return (
     <div>
-    <SearchBar updatedListProp={updatedUserList} />
+    <SearchBar updatedListProp={setSearchTerm} />
     <TableContainer component={Paper} sx={{marginTop:"75px", width:"80vw"}}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Photo</TableCell>
+            <TableCell>Apple ID</TableCell>
             <TableCell align="right">Username</TableCell>
             <TableCell align="right">First</TableCell>
             <TableCell align="right">Last</TableCell>
             <TableCell align="right">Paid</TableCell>
-            
-
           </TableRow>
         </TableHead>
         <TableBody>
-          {
-            users===0?
+          {users === 0 ? (
             <div></div>
-            :
-          users.map((row) => (
-            <Row key={row._id} row={row} />
-          ))
-          
-          }
+          ) : (
+            users.map((row) => (
+              <Row key={row._id} row={row} />
+            )
+          ))}
         </TableBody>
       </Table>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 50]}
         component="div"
-        count={totalUsers}
         rowsPerPage={perPage}
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        onRowsPerPageChange={handleChangeRowsPerPage}
         page={page}
         onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+        count={totalUsers}
       />
     </TableContainer>
     </div>
   );
 }
 
-
-function createData(name, calories, fat, carbs, protein, price) {
-    return {
-      name,
-      calories,
-      fat,
-      carbs,
-      protein,
-      price,
-      history: [
-        {
-          date: '2020-01-05',
-          customerId: '11091700',
-          amount: 3,
-        },
-        {
-          date: '2020-01-02',
-          customerId: 'Anonymous',
-          amount: 1,
-        },
-      ],
-    };
-  }
-  
-  function Row(props) {
-    const { row } = props;
+  function Row({row}) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     let editButtonClicked = (appleID) => {
@@ -140,7 +95,7 @@ function createData(name, calories, fat, carbs, protein, price) {
     }
 
     return (
-      <Fragment>
+      <>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
           <TableCell>
             <IconButton
@@ -148,7 +103,7 @@ function createData(name, calories, fat, carbs, protein, price) {
               size="small"
               onClick={() => setOpen(!open)}
             >
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
             </IconButton>
           </TableCell>
           <TableCell component="th" scope="row">
@@ -159,12 +114,12 @@ function createData(name, calories, fat, carbs, protein, price) {
           <TableCell align="right">{row.lastName}</TableCell>
           <TableCell align="right">{row.paid.toString()}</TableCell>
           <TableCell align="right">
-          <IconButton type="button" onClick={() => editButtonClicked(row.appleID)}>
-            <Edit color="primary" />
-          </IconButton>
-
+            <IconButton type="button" onClick={() => editButtonClicked(row.appleID)}>
+              <Edit color="primary" />
+            </IconButton>
           </TableCell>
         </TableRow>
+
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
@@ -198,11 +153,6 @@ function createData(name, calories, fat, carbs, protein, price) {
             </Collapse>
           </TableCell>
         </TableRow>
-      </Fragment>
+      </>
     );
   }
-  
-
-  
-
-  
