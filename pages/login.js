@@ -54,28 +54,7 @@ export default function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get("username"),
-      password: data.get("password"),
-    });
-    fetch("https://intense-brook-83972.herokuapp.com/login", {
-      method: "post",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: data.get("username"),
-        pw: data.get("password")
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => checkCreds(data.get("username"), res))
-      .catch((err) => console.log(err));
-    console.log(fetchData(data.get("username"),data.get("password")))
-    // .then((res) => res.json())
-    //   .then((res) => checkCreds(data.get("username"), res))
-    //   .catch((err) => console.log(err));
+    fetchData(data.get("username"),data.get("password"))
   };
   return (
     <ThemeProvider theme={theme}>
