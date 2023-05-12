@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
 import { setCookie, getCookie } from "cookies-next";
-
+import loginAdmin from "../server/UserRoutes"
 function Copyright(props) {
   return (
     <Typography
@@ -47,7 +47,10 @@ export default function Login() {
       //error message
     }
   };
-
+  const fetchData = async (username,pw) => {
+    const res = await loginAdmin(username,pw)
+    checkCreds(username, res);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -55,20 +58,10 @@ export default function Login() {
       username: data.get("username"),
       password: data.get("password"),
     });
-    fetch("https://intense-brook-83972.herokuapp.com/login", {
-      method: "post",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: data.get("username"),
-        pw: data.get("password"),
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => checkCreds(data.get("username"), res))
-      .catch((err) => console.log(err));
+    console.log(fetchData(data.get("username"),data.get("password")))
+    // .then((res) => res.json())
+    //   .then((res) => checkCreds(data.get("username"), res))
+    //   .catch((err) => console.log(err));
   };
   return (
     <ThemeProvider theme={theme}>
