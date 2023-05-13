@@ -1,7 +1,7 @@
 import { getCookie } from "cookies-next";
 //update this value with either local host or deploy server url
 const API_KEY = "http://localhost:3001"
-
+// const API_KEY = "https://intense-brook-83972.herokuapp.com"
 export async function getSpecGirl(specGirl) {
     const result = await fetch(`${API_KEY}/get-girl`, {
         method: "post",
