@@ -4,27 +4,18 @@ import { Edit} from '@mui/icons-material'
 import SearchBar from "../components/SearchBar"
 import { useRouter } from 'next/navigation';
 import { getCookie } from 'cookies-next';
-
+import {getGirls} from "../server/UserRoutes"
 export default function CollapsibleTable() {
     let [girls, setGirls] = useState([]);
     let [searchTerm, setSearchTerm] = useState("");
-
-    const getGirls = () => {
-        fetch('https://intense-brook-83972.herokuapp.com/get-all-girls' , {
-            method: 'post', 
-            headers: {
-              'Authorization': getCookie('token'), 
-              'Accept': 'application/json, text/plain, */*',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-          }).then(res=>res.json())
-            .then(res => setGirls(res))
-            .catch(err => console.log(err))  
-      };
+    
+    const fetchGirls = async () => {
+      const res = await getGirls()
+      setGirls(res)
+    };
 
     useEffect(() => {
-        getGirls()
+      fetchGirls()
       }, []);
   return (
     <div>

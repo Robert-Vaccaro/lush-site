@@ -2,30 +2,18 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {Card, CardActions, CardContent, Button, Typography, CardMedia, ImageList, ImageListItem} from '@mui/material'
 import moment from "moment";
-import { getCookie } from "cookies-next";
+import {getSpecGirl} from "../server/UserRoutes"
 
 export default function SpecGirl() {
   const router = useRouter();
 
-  let [girl, setGirl] = useState([]);
+  let [girl, setGirl] = useState(undefined);
 
-  const getSpecificGirl = (girlHandle) => {
-    fetch("https://intense-brook-83972.herokuapp.com/get-girl", {
-      method: "post",
-      headers: {
-        Authorization: getCookie("token"),
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: getCookie("username"),
-        girlHandle: girlHandle,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => setGirl(res))
-      .catch((err) => console.log(err));
+  const getSpecificGirl = async (girlHandle) => {
+    const res = await getSpecGirl(girlHandle)
+    setGirl(res);
   };
+
   useEffect(() => {
     if (router.isReady) {
       getSpecificGirl(router.query.girl);
@@ -33,7 +21,7 @@ export default function SpecGirl() {
   }, [router.isReady]);
   return (
     <div>
-      {girl.length === 0 ? (
+      {girl === undefined ? (
         <div></div>
       ) : (
         <div>
@@ -42,16 +30,11 @@ export default function SpecGirl() {
           </Button>
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
-              <Typography variant="h5">
-                <u>Girl Information</u>
-              </Typography>
+            <CardMedia component='img' src={girl.profilePic} sx={{ width: '150px', height: 'auto' }}/>
               <Typography>Database ID: {girl._id}</Typography>
               <Typography>Girl Name: {girl.girlName}</Typography>
               <Typography>Girl Handle: {girl.girlHandle}</Typography>
               <Typography>Last Message: {girl.lastMessage}</Typography>
-              <Typography>Profile Pic:
-                <CardMedia component='img' src={girl.profilePic} sx={{ width: '50px', height: 'auto' }}/>
-              </Typography>
               <Typography>
                 Created:{" "}
                 {moment
@@ -64,17 +47,34 @@ export default function SpecGirl() {
             </CardContent>
           </Card>
           <br></br>
-			<Typography>
-				<ImageList cols={girl.images.length} rowHeight={150}>
-					{girl.images === 0 ? "" :
-						girl.images.map((image, index) => {
-							<ImageListItem key={index}>
-								<CardMedia component='img' src={image} sx={{ width: 'auto', height: '145' }}/>
-							</ImageListItem>
-						})
+				<ImageList sx={{ width: "100%", height: "100vh" }} cols={3} rowHeight={150}>
+					{
+            girl.images.length === 0 ? <div>hi</div> :
+            girl.images.map((item, index) => (
+              <ImageListItem key={index}>
+                      <CardMedia
+                        component="img"
+                        height="auto"
+                        weidth="auto"
+                        src={`${item}`}
+                        alt="Paella dish"
+                      />
+                {/* <CardMedia
+                  
+                  srcSet={`${item}`}
+                  alt={"item"}
+                  loading="lazy"
+                  sx={{ width: 150, height: 150 }}
+                /> */}
+              </ImageListItem>
+            ))
+						// .map((image, index) => {
+						// 	<ImageListItem key={index}>
+						// 		<img component='img' src={image}/>
+						// 	 </ImageListItem> 
+						// })
 					}
 				</ImageList>
-			</Typography>
           <br></br>
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
@@ -84,15 +84,16 @@ export default function SpecGirl() {
                 : girl.startMessages.map((message, index) => (
                     <Typography key={index}>
                       <u>
-                        <b>{index}</b>
+                        <b>{message.type}</b>
                       </u>
-                      : {message}
+                      : {message.content}
                     </Typography>
                   ))}
             </CardContent>
           </Card>
         </div>
-      )}
+      )
+    }
     </div>
   );
 }

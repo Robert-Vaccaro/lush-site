@@ -5,7 +5,7 @@ import moment from "moment";
 import ChangePrompt from "../components/ChangePrompt";
 import ChangeResStr from "../components/ChangeResStr";
 import BanUser from "../components/BanUser";
-import { getCookie } from "cookies-next";
+import {getSpecUser, getSpecUserMessages} from "../server/UserRoutes"
 
 export default function SpecUser() {
   const router = useRouter();
@@ -13,38 +13,17 @@ export default function SpecUser() {
   let [user, setUser] = useState([]);
   let [messages, setMessages] = useState([]);
   let [updatePage, setUpdatePage] = useState(true);
-  const getSpecificUser = (appleID) => {
-    fetch("https://intense-brook-83972.herokuapp.com/get-user", {
-      method: "post",
-      headers: {
-        Authorization: getCookie("token"),
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: getCookie("username"),
-        appleID: appleID,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => setUser(res))
-      .catch((err) => console.log(err));
+
+  const getSpecificUser = async (appleID) => {
+    const res = await getSpecUser(appleID)
+    setUser(res);
   };
-  const getUserMessages = (appleID) => {
-    fetch("https://intense-brook-83972.herokuapp.com/admin-get-messages", {
-      method: "post",
-      headers: {
-        'Authorization': getCookie('token'), 
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({username:getCookie("username"), appleID: appleID }),
-    })
-      .then((res) => res.json())
-      .then((res) => setMessages(res))
-      .catch((err) => console.log(err));
-    setUpdatePage(false);
+  const getUserMessages = async (appleID) => {
+    const res = await getSpecUserMessages(appleID)
+    console.log(res)
+    setMessages(res);
   };
+
   useEffect(() => {
     if (router.isReady) {
       getSpecificUser(router.query.user);
@@ -107,11 +86,12 @@ export default function SpecUser() {
               <ChangePrompt
                 appleID={router.query.user}
                 changeUser={() =>  setUpdatePage(!updatePage)}
-				previousPrompt={user.prompt}
+				        previousPrompt={user.prompt}
               />
               <ChangeResStr
                 appleID={router.query.user}
                 changeUser={() =>  setUpdatePage(!updatePage)}
+                previousResponseStr={user.responseStr}
               />
               <BanUser
                 appleID={router.query.user}
@@ -126,15 +106,19 @@ export default function SpecUser() {
               <Typography variant="h5">Messages</Typography>
               <br></br>
               {messages.length === 0
-                ? ""
-                : messages.map((message, i) => (
-                    <Typography key={i}>
+                ? <div></div>
+                : 
+                messages.map((message, i) => (
+                    <div key={i}>
                       <u>
                         <b>{message.sentFrom}</b>
                       </u>
-                      : {message.message}
-                    </Typography>
-                  ))}
+                      :{message.message === ""?<div><img src={message.downloadURL} width={75}/></div>:<Typography>{message.message}</Typography>}
+                      <br></br>
+                    </div>
+                  ))
+              }
+              
             </CardContent>
             <CardActions>
               <Button size="small">Delete Chat</Button>

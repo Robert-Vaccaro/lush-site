@@ -3,7 +3,8 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { getCookie } from 'cookies-next';
+import {submitBan} from "../server/UserRoutes"
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -31,20 +32,11 @@ export default function BanUser(props) {
   const handleClose = () => {
     setOpen(false);
   };
-  const submitBan = (banStatus) => {
-    fetch('https://intense-brook-83972.herokuapp.com/update-ban-status', {
-        method: 'post', 
-        headers: {
-            'Authorization': getCookie('token'),
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({username:getCookie("username"), appleID:props.appleID, banned:banStatus})
-        //  body: JSON.stringify({username: data.get('email'), pw:data.get('password')})
-      }).then(res=>res.json())
-        .then(res => {props.changeUser()})
-        .catch(err => {console.log(err);handleClose()})  
-  }
+
+  const fetchSubmitBan = async (banStatus) => {
+		const res = await submitBan(props.appleID, banStatus);
+		props.changeUser()
+	};
 
   return (
     <div>
@@ -59,9 +51,9 @@ export default function BanUser(props) {
           <h2 id="parent-modal-title">Update Ban Status</h2>
           <p>Current Ban Status: {props.currentBanStatus.toString()}</p>
             <br></br>
-            <Button onClick={() => {submitBan(true);handleClose();}} variant="contained">Ban</Button>
+            <Button onClick={() => {fetchSubmitBan(true);handleClose();}} variant="contained">Ban</Button>
             <br></br>
-            <Button onClick={() => {submitBan(false);handleClose();}} variant="contained">Unban</Button>
+            <Button onClick={() => {fetchSubmitBan(false);handleClose();}} variant="contained">Unban</Button>
         </Box>
       </Modal>
     </div>

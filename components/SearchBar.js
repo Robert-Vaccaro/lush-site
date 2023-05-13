@@ -22,8 +22,7 @@ export default function CustomizedInputBase({updatedListProp}) {
     >
       <InputBase
         sx={{ ml: 1, flex: 1, mt: '6px' }}
-        placeholder="Search"
-        inputProps={{ 'aria-label': 'search google maps' }}
+        placeholder="Search by username"
         onChange={(e) => changeVal(e.target.value)}
       />
       <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={(e) => {submitForm(e)}}>

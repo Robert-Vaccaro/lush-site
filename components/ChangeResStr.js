@@ -1,9 +1,10 @@
-import * as React from 'react';
+import {useState, useRef, useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { getCookie } from 'cookies-next';
+import {submitResStr} from "../server/UserRoutes"
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -22,28 +23,29 @@ const style = {
 };
 
 export default function ChangeResStr(props) {
-  const [newResStr, setResStr] = React.useState("");
-  const [open, setOpen] = React.useState(false);
+  const selectionRef = useRef();
+  const [newResStr, setResStr] = useState("");
+  const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
-  const submitResStr = () => {
-    fetch('https://intense-brook-83972.herokuapp.com/update-response-str', {
-        method: 'post', 
-        headers: {
-          'Authorization': getCookie('token'),
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({username:getCookie("username"), appleID:props.appleID, newResStr: newResStr})
-        //  body: JSON.stringify({username: data.get('email'), pw:data.get('password')})
-      }).then(res=>res.json())
-        .then(res => {props.changeUser()})
-        .catch(err => {console.log(err);handleClose()})  
-  }
+  const fetchSubmitResStr = async () => {
+    const res = await submitResStr(props.appleID, newResStr);
+    props.changeUser()
+  };
+  useEffect(() => {
+		if(open){
+			setTimeout(() => {
+				selectionRef.current.select()
+				const scrollDelay = setTimeout(() => {
+				}, 250);
+				return () => clearTimeout(scrollDelay);
+			}, 1);
+		}
+	}, [open])
   return (
     <div>
       <Button onClick={handleOpen}>Change Response String</Button>
@@ -57,15 +59,16 @@ export default function ChangeResStr(props) {
           <h2 id="parent-modal-title">Change Reponse String</h2>
           <TextField
           id="filled-multiline-static"
-          label="Prompt"
+          label="Response String"
           multiline
           rows={4}
-          defaultValue=""
+          inputRef={selectionRef}
+          defaultValue={props.previousResponseStr}
           variant="filled"
           onChange={(e) => setResStr(e.target.value)}
         />
         <br></br>
-            <Button onClick={() => {submitResStr();handleClose();}} variant="contained">Submit</Button>
+            <Button onClick={() => {fetchSubmitResStr();handleClose();}} variant="contained">Submit</Button>
         </Box>
       </Modal>
     </div>

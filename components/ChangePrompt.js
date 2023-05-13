@@ -1,6 +1,7 @@
 import {useState, useRef, useEffect} from 'react';
 import {Box, Modal, Button, TextField} from '@mui/material'
 import { getCookie } from 'cookies-next';
+import {submitPrompt} from "../server/UserRoutes"
 
 const style = {
   position: 'absolute',
@@ -26,29 +27,21 @@ export default function ChangePrompt({ appleID, changeUser, previousPrompt }) {
 	const handleOpen = () => {
 		setOpen(true)
 	};
+
 	const handleClose = () => {
 		setOpen(false);
 	};
-	const submitPrompt = () => {
-		fetch('https://intense-brook-83972.herokuapp.com/update-prompt', {
-			method: 'post',
-			headers: {
-				'Authorization': getCookie('token'),
-				'Accept': 'application/json, text/plain, */*',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ username: getCookie("username"), appleID: appleID, newPrompt: newPrompt })
-		}).then(res => res.json())
-			.then(() => { changeUser() })
-			.catch(err => { console.log(err); handleClose() })
-	}
+
+	const fetchSubmitPrompt = async () => {
+		const res = await submitPrompt(appleID, newPrompt);
+		changeUser()
+	};
 
 	useEffect(() => {
 		if(open){
 			setTimeout(() => {
 				selectionRef.current.select()
 				const scrollDelay = setTimeout(() => {
-					selectionRef.current.scrollTop = 0;
 				}, 250);
 				return () => clearTimeout(scrollDelay);
 			}, 1);
@@ -74,7 +67,7 @@ export default function ChangePrompt({ appleID, changeUser, previousPrompt }) {
 					/>
 					<Button onClick={() => { 
 						if(newPrompt !== previousPrompt){
-							submitPrompt();
+							fetchSubmitPrompt();
 						}
 						handleClose(); 
 					}} variant="contained">Submit</Button>

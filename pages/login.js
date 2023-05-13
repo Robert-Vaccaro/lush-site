@@ -13,8 +13,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
-import { setCookie, getCookie } from "cookies-next";
-import loginAdmin from "../server/UserRoutes"
+import { setCookie } from "cookies-next";
+import {loginAdmin} from "../server/UserRoutes"
 function Copyright(props) {
   return (
     <Typography
@@ -44,6 +44,7 @@ export default function Login() {
       setCookie("token", res.token);
       router.push("/dashboard");
     } else {
+      //add error here
       console.log(res.message)
     }
   };

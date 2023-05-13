@@ -5,7 +5,7 @@ import SearchBar from "../components/SearchBar"
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { getCookie } from 'cookies-next';
-
+import {getUsers} from "../server/UserRoutes"
 //TODO:
   // Add scrolling with lazy loading
 
@@ -31,22 +31,12 @@ export default function CollapsibleTable() {
       setPerPage(e.target.value)
       setPage(0)
     }
-    const getUsers = () => {
-        fetch('https://intense-brook-83972.herokuapp.com/get-users', {
-            method: 'post', 
-            headers: {
-              'Authorization': getCookie('token'), 
-              'Accept': 'application/json, text/plain, */*',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({username:getCookie("username"), userSearch: searchTerm, page:page,limit:perPage})
-            //  body: JSON.stringify({username: data.get('email'), pw:data.get('password')})
-          }).then(res=>res.json())
-            .then(res => setUserList(res))
-            .catch(err => console.log(err))  
-      };
+    const fetchUsers = async () => {
+      const res = await getUsers(searchTerm, page, perPage)
+      setUserList(res)
+    };
     useEffect(() => {
-        getUsers()
+      fetchUsers()
       }, [searchTerm, page, perPage]);
   return (
     <div>
