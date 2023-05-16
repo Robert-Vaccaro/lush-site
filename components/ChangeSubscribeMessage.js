@@ -1,6 +1,6 @@
 import {useState, useRef, useEffect} from 'react';
 import {Box, Modal, Button, TextField} from '@mui/material'
-import {submitPrompt} from "../server/UserRoutes"
+import {submitSubscribeMessage} from "../server/UserRoutes"
 
 const style = {
   position: 'absolute',
@@ -18,10 +18,10 @@ const style = {
   flexDirection:"column"
 };
 
-export default function ChangePrompt({ appleID, changeUser, previousPrompt }) {
+export default function ChangeSubscribeMessage({girlHandle, changeGirl, previousSubscribeMessage}) {
 	const selectionRef = useRef();
 	const [open, setOpen] = useState(false);
-	const [newPrompt, setNewPrompt] = useState("");
+	const [newSubscribeMessage, setNewSubscribeMessage] = useState("");
 
 	const handleOpen = () => {
 		setOpen(true)
@@ -31,9 +31,9 @@ export default function ChangePrompt({ appleID, changeUser, previousPrompt }) {
 		setOpen(false);
 	};
 
-	const fetchSubmitPrompt = async () => {
-		const res = await submitPrompt(appleID, newPrompt);
-		changeUser()
+	const fetchSubmitSubscribeMessage = async () => {
+		const res = await submitSubscribeMessage(girlHandle, newSubscribeMessage);
+		changeGirl()
 	};
 
 	useEffect(() => {
@@ -49,10 +49,10 @@ export default function ChangePrompt({ appleID, changeUser, previousPrompt }) {
 
 	return (
 		<div>
-			<Button onClick={handleOpen}>Change Prompt</Button>
+			<Button onClick={handleOpen}>Change Subscribe Message</Button>
 			<Modal open={open} onClose={handleClose} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
 				<Box sx={{ ...style }}>
-					<h2 id="parent-modal-title">Change Prompt</h2>
+					<h2 id="parent-modal-title">Change Subscribe Message</h2>
 					<TextField
 						id="filled-multiline-static"
 						label="Prompt"
@@ -60,13 +60,13 @@ export default function ChangePrompt({ appleID, changeUser, previousPrompt }) {
 						multiline
 						rows={4}
 						inputRef={selectionRef}
-						defaultValue={previousPrompt}
+						defaultValue={previousSubscribeMessage}
 						variant="filled"
-						onChange={(e) => setNewPrompt(e.target.value)}
+						onChange={(e) => setNewSubscribeMessage(e.target.value)}
 					/>
 					<Button onClick={() => { 
-						if(newPrompt !== previousPrompt){
-							fetchSubmitPrompt();
+						if(newSubscribeMessage !== previousSubscribeMessage){
+							fetchSubmitSubscribeMessage();
 						}
 						handleClose(); 
 					}} variant="contained">Submit</Button>

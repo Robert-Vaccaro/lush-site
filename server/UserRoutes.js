@@ -1,7 +1,7 @@
 import { getCookie } from "cookies-next";
 //update this value with either local host or deploy server url
-const API_KEY = "http://localhost:3001"
-// const API_KEY = "https://intense-brook-83972.herokuapp.com"
+//const API_KEY = "http://localhost:3001"
+const API_KEY = "https://intense-brook-83972.herokuapp.com"
 export async function getSpecGirl(specGirl) {
     const result = await fetch(`${API_KEY}/get-girl`, {
         method: "post",
@@ -16,6 +16,7 @@ export async function getSpecGirl(specGirl) {
         }),
       })
     let response = await result.json();
+		console.log(response)
     return response
 }
 
@@ -69,11 +70,7 @@ export async function getSpecUserMessages(appleID) {
     return response
 }
 
-export async function getUsers(searchTerm,page,perPage) {
-    const result = await     fetch(`${API_KEY}/get-users`, {
-        method: 'post', 
-        headers: {
-          'Authorization': getCookie('token'), 
+export async function getUsers(searchTerm,page,perPage) { const result = await     fetch(`${API_KEY}/get-users`, { method: 'post', headers: { 'Authorization': getCookie('token'), 
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json'
         },
@@ -133,6 +130,34 @@ export async function submitBan(appleID, banStatus) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({username:getCookie("username"), appleID:appleID, banned:banStatus})
+      })
+    let response = await result.json();
+    return response
+}
+
+export async function submitLastMessage(girlHandle, newLastMessage){
+    const result = await fetch(`${API_KEY}/update-last-message`, {
+        method: 'post', 
+        headers: {
+            'Authorization': getCookie('token'),
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+			body: JSON.stringify({username:getCookie("username"), girlHandle: girlHandle, newLastMessage: newLastMessage})
+      })
+    let response = await result.json();
+    return response
+}
+
+export async function submitSubscribeMessage(girlHandle, newSubscribeMessage){
+    const result = await fetch(`${API_KEY}/update-subscribe-message`, {
+        method: 'post', 
+        headers: {
+            'Authorization': getCookie('token'),
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+			body: JSON.stringify({username:getCookie("username"), girlHandle: girlHandle, newSubscribeMessage: newSubscribeMessage})
       })
     let response = await result.json();
     return response

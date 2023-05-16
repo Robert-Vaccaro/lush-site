@@ -3,11 +3,14 @@ import { useRouter } from "next/router";
 import {Card, CardActions, CardContent, Button, Typography, CardMedia, ImageList, ImageListItem} from '@mui/material'
 import moment from "moment";
 import {getSpecGirl} from "../server/UserRoutes"
+import ChangeLastMessage from '../components/ChangeLastMessage'
+import ChangeSubscribeMessage from '../components/ChangeSubscribeMessage'
 
 export default function SpecGirl() {
   const router = useRouter();
 
   let [girl, setGirl] = useState(undefined);
+	let [updatePage, setUpdatePage] = useState(false);
 
   const getSpecificGirl = async (girlHandle) => {
     const res = await getSpecGirl(girlHandle)
@@ -18,7 +21,7 @@ export default function SpecGirl() {
     if (router.isReady) {
       getSpecificGirl(router.query.girl);
     }
-  }, [router.isReady]);
+  }, [router.isReady, updatePage]);
   return (
     <div>
       {girl === undefined ? (
@@ -30,6 +33,7 @@ export default function SpecGirl() {
           </Button>
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
+						<Typography variant="h5"><u>Girl Information</u></Typography>
             <CardMedia component='img' src={girl.profilePic} sx={{ width: '150px', height: 'auto' }}/>
               <Typography>Database ID: {girl._id}</Typography>
               <Typography>Girl Name: {girl.girlName}</Typography>
@@ -45,36 +49,53 @@ export default function SpecGirl() {
               <Typography>Messages Count: {girl.messageCount}</Typography>
               <Typography>Subscribe Message: {girl.subscribeMessage}</Typography>
             </CardContent>
+            <CardActions>
+							<ChangeLastMessage
+								girlHandle={girl.girlHandle}
+								previousLastMessage={girl.lastMessage}
+								changeGirl={() => setUpdatePage(!updatePage)}
+							/>
+							<ChangeSubscribeMessage
+								girlHandle={girl.girlHandle}
+								changeGirl={() => setUpdatePage(!updatePage)}
+								previousSubscribeMessage={girl.subscribeMessage}
+							/>
+            </CardActions>
           </Card>
           <br></br>
-				<ImageList sx={{ width: "100%", height: "100vh" }} cols={3} rowHeight={150}>
-					{
-            girl.images.length === 0 ? <div>hi</div> :
-            girl.images.map((item, index) => (
-              <ImageListItem key={index}>
-                      <CardMedia
-                        component="img"
-                        height="auto"
-                        weidth="auto"
-                        src={`${item}`}
-                        alt="Paella dish"
-                      />
-                {/* <CardMedia
-                  
-                  srcSet={`${item}`}
-                  alt={"item"}
-                  loading="lazy"
-                  sx={{ width: 150, height: 150 }}
-                /> */}
-              </ImageListItem>
-            ))
-						// .map((image, index) => {
-						// 	<ImageListItem key={index}>
-						// 		<img component='img' src={image}/>
-						// 	 </ImageListItem> 
-						// })
-					}
-				</ImageList>
+          <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+						<Typography variant="h5">Images</Typography>
+						<ImageList sx={{ width: "100%", height: "100vh" }} cols={3} rowHeight={150}>
+							{
+								girl.images.length === 0 ? <div>hi</div> :
+								girl.images.map((item, index) => (
+									<ImageListItem key={index}>
+													<CardMedia
+														component="img"
+														height="auto"
+														weidth="auto"
+														src={`${item}`}
+														alt="Paella dish"
+													/>
+										{/* <CardMedia
+											
+											srcSet={`${item}`}
+											alt={"item"}
+											loading="lazy"
+											sx={{ width: 150, height: 150 }}
+										/> */}
+									</ImageListItem>
+								))
+								// .map((image, index) => {
+								// 	<ImageListItem key={index}>
+								// 		<img component='img' src={image}/>
+								// 	 </ImageListItem> 
+								// })
+							}
+						</ImageList>
+						</CardContent>
+					</Card>
           <br></br>
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
@@ -86,7 +107,9 @@ export default function SpecGirl() {
                       <u>
                         <b>{message.type}</b>
                       </u>
-                      : {message.content}
+                      : {message.type === "image" ? 
+												<CardMedia component='img' src={message.content} sx={{ width: '150px', height: 'auto' }}/> :
+												message.content}
                     </Typography>
                   ))}
             </CardContent>
