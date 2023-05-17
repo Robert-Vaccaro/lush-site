@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {Card, CardActions, CardContent, Button, Typography, CardMedia, ImageList, ImageListItem} from '@mui/material'
+import {Card, CardActions, CardContent, Button, Typography, CardMedia} from '@mui/material'
 import moment from "moment";
 import {getSpecGirl} from "../server/UserRoutes"
 import ChangeLastMessage from '../components/ChangeLastMessage'
@@ -35,7 +35,14 @@ export default function SpecGirl() {
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
 						<Typography variant="h5"><u>Girl Information</u></Typography>
-            <CardMedia component='img' src={girl.profilePic} sx={{ width: '150px', height: '150px', borderRadius: '50%' }}/>
+						<div style={{position: 'relative'}}>
+							<CardMedia component='img' src={girl.profilePic} sx={{ width: '150px', height: '150px', borderRadius: '50%' }}/>
+							<ChangeProfilePicture 
+								girlHandle={girl.girlHandle}
+								changeGirl={() => setUpdatePage(!updatePage)}
+								previousProfilePicture={girl.profilePic}
+							/>
+						</div>
               <Typography>Database ID: {girl._id}</Typography>
               <Typography>Girl Name: {girl.girlName}</Typography>
               <Typography>Girl Handle: {girl.girlHandle}</Typography>
@@ -60,11 +67,6 @@ export default function SpecGirl() {
 								girlHandle={girl.girlHandle}
 								changeGirl={() => setUpdatePage(!updatePage)}
 								previousSubscribeMessage={girl.subscribeMessage}
-							/>
-							<ChangeProfilePicture 
-								girlHandle={girl.girlHandle}
-								changeGirl={() => setUpdatePage(!updatePage)}
-								previousProfilePicture={girl.profilePic}
 							/>
             </CardActions>
           </Card>

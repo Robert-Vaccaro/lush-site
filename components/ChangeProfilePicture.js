@@ -1,5 +1,6 @@
 import {useState} from 'react';
-import {Box, Modal, Button, CardMedia} from '@mui/material'
+import {Box, Modal, Button, CardMedia, IconButton} from '@mui/material'
+import {Edit} from '@mui/icons-material'
 import {submitProfilePicture} from "../server/UserRoutes"
 
 const style = {
@@ -41,7 +42,9 @@ export default function ChangeProfilePicture({ girlHandle, changeGirl, previousP
 
 	return (
 		<div>
-			<Button onClick={handleOpen}>Change Profile Picture</Button>
+			<IconButton onClick={handleOpen} type="button" sx={{position: 'absolute', bottom: '0', left:'110px', background: 'white', boxShadow: '24', '&:hover':{background:'#ffffffea'} }}>
+				<Edit color="primary" />
+			</IconButton>
 			<Modal open={open} onClose={handleClose} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
 				<Box sx={{...style}}>
 					<h2 id="parent-modal-title">Change Profile Picture</h2>
