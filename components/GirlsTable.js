@@ -55,7 +55,7 @@ export default function CollapsibleTable() {
       <>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
           <TableCell component="th" scope="row">
-            <CardMedia component='img' src={row.profilePic} sx={{ width: '50px', height: 'auto' }}/>
+            <CardMedia component='img' src={row.profilePic} sx={{ width: '50px', height: '50px', borderRadius: '50%' }}/>
           </TableCell>
           <TableCell align="right">{row.girlName}</TableCell>
           <TableCell align="right">{row.userCount}</TableCell>

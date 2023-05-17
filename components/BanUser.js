@@ -12,7 +12,6 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
   pt: 2,
   px: 4,
@@ -51,7 +50,7 @@ export default function BanUser(props) {
           <h2 id="parent-modal-title">Update Ban Status</h2>
           <p>Current Ban Status: {props.currentBanStatus.toString()}</p>
             <br></br>
-            <Button onClick={() => {fetchSubmitBan(true);handleClose();}} variant="contained">Ban</Button>
+            <Button sx={{marginBottom: '5px'}} onClick={() => {fetchSubmitBan(true);handleClose();}} variant="contained">Ban</Button>
             <br></br>
             <Button onClick={() => {fetchSubmitBan(false);handleClose();}} variant="contained">Unban</Button>
         </Box>

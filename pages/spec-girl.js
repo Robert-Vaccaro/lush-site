@@ -5,6 +5,7 @@ import moment from "moment";
 import {getSpecGirl} from "../server/UserRoutes"
 import ChangeLastMessage from '../components/ChangeLastMessage'
 import ChangeSubscribeMessage from '../components/ChangeSubscribeMessage'
+import ChangeProfilePicture from "../components/ChangeProfilePicture";
 
 export default function SpecGirl() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function SpecGirl() {
 
   useEffect(() => {
     if (router.isReady) {
-      getSpecificGirl(router.query.girl);
+      getSpecificGirl(router.query.girl)
     }
   }, [router.isReady, updatePage]);
   return (
@@ -34,7 +35,7 @@ export default function SpecGirl() {
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
 						<Typography variant="h5"><u>Girl Information</u></Typography>
-            <CardMedia component='img' src={girl.profilePic} sx={{ width: '150px', height: 'auto' }}/>
+            <CardMedia component='img' src={girl.profilePic} sx={{ width: '150px', height: '150px', borderRadius: '50%' }}/>
               <Typography>Database ID: {girl._id}</Typography>
               <Typography>Girl Name: {girl.girlName}</Typography>
               <Typography>Girl Handle: {girl.girlHandle}</Typography>
@@ -60,40 +61,31 @@ export default function SpecGirl() {
 								changeGirl={() => setUpdatePage(!updatePage)}
 								previousSubscribeMessage={girl.subscribeMessage}
 							/>
+							<ChangeProfilePicture 
+								girlHandle={girl.girlHandle}
+								changeGirl={() => setUpdatePage(!updatePage)}
+								previousProfilePicture={girl.profilePic}
+							/>
             </CardActions>
           </Card>
           <br></br>
-          <Card sx={{ minWidth: 275 }}>
-            <CardContent>
+          <Card sx={{ minWidth: 275}}>
+						<CardContent>
 						<Typography variant="h5">Images</Typography>
-						<ImageList sx={{ width: "100%", height: "100vh" }} cols={3} rowHeight={150}>
+						<div style={{ width: "100%", display: 'grid', gridAutoFlow: 'column', gridAutoColumns: 'calc(100% / 3)', overflowX: 'scroll', gridGap: '10px' }}>
 							{
-								girl.images.length === 0 ? <div>hi</div> :
+								girl.images.length === 0 ? <div></div> :
 								girl.images.map((item, index) => (
-									<ImageListItem key={index}>
-													<CardMedia
-														component="img"
-														height="auto"
-														weidth="auto"
-														src={`${item}`}
-														alt="Paella dish"
-													/>
-										{/* <CardMedia
-											
-											srcSet={`${item}`}
-											alt={"item"}
-											loading="lazy"
-											sx={{ width: 150, height: 150 }}
-										/> */}
-									</ImageListItem>
-								))
-								// .map((image, index) => {
-								// 	<ImageListItem key={index}>
-								// 		<img component='img' src={image}/>
-								// 	 </ImageListItem> 
-								// })
-							}
-						</ImageList>
+									<CardMedia
+										key={index}
+										component="img"
+										height="auto"
+										width="auto"
+										src={`${item}`}
+										alt="Paella dish"
+									/>
+								))}
+						</div>
 						</CardContent>
 					</Card>
           <br></br>
