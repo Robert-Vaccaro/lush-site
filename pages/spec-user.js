@@ -111,7 +111,9 @@ export default function SpecUser() {
                 messages.map((message, i) => (
                     <div key={i}>
                       <u>
-                        <b>{message.sentFrom}</b>
+                        <b>{message.sentFrom} @ {moment
+                  .unix(message.timeSent)
+                  .format(" h:mm:ss A, dddd, MMMM Do, YYYY")}</b>
                       </u>
                       :{message.message === ""?<div><img src={message.downloadURL} width={75}/></div>:<Typography>{message.message}</Typography>}
                       <br></br>

@@ -1,6 +1,6 @@
 import { getCookie } from "cookies-next";
 //update this value with either local host or deploy server url
-//const API_KEY = "http://localhost:3001"
+// const API_KEY = "http://localhost:3001"
 const API_KEY = "https://intense-brook-83972.herokuapp.com"
 export async function getSpecGirl(specGirl) {
     const result = await fetch(`${API_KEY}/get-girl`, {
@@ -70,7 +70,8 @@ export async function getSpecUserMessages(appleID) {
     return response
 }
 
-export async function getUsers(searchTerm,page,perPage) { const result = await     fetch(`${API_KEY}/get-users`, { method: 'post', headers: { 'Authorization': getCookie('token'), 
+export async function getUsers(searchTerm,page,perPage) { 
+	const result = await     fetch(`${API_KEY}/get-users`, { method: 'post', headers: { 'Authorization': getCookie('token'), 
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json'
         },
