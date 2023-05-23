@@ -6,6 +6,7 @@ import {getSpecGirl} from "../server/UserRoutes"
 import ChangeLastMessage from '../components/ChangeLastMessage'
 import ChangeSubscribeMessage from '../components/ChangeSubscribeMessage'
 import ChangeProfilePicture from "../components/ChangeProfilePicture";
+import ChangeImage from "../components/ChangeImage"
 
 export default function SpecGirl() {
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function SpecGirl() {
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
 						<Typography variant="h5"><u>Girl Information</u></Typography>
-						<div style={{position: 'relative'}}>
+						<div style={{position: 'relative', paddingBottom: '10px'}}>
 							<CardMedia component='img' src={girl.profilePic} sx={{ width: '150px', height: '150px', borderRadius: '50%' }}/>
 							<ChangeProfilePicture 
 								girlHandle={girl.girlHandle}
@@ -78,14 +79,23 @@ export default function SpecGirl() {
 							{
 								girl.images.length === 0 ? <div></div> :
 								girl.images.map((item, index) => (
-									<CardMedia
-										key={index}
-										component="img"
-										height="auto"
-										width="auto"
-										src={`${item}`}
-										alt="Paella dish"
+									<div style={{position:'relative'}}>
+										<CardMedia
+											key={index}
+											component="img"
+											height="auto"
+											width="300px"
+											src={`${item}`}
+											alt="Paella dish"
+											sx={{borderTopRightRadius: '22px'}}
+										/>
+									<ChangeImage
+										girlHandle={girl.girlHandle}
+										imageIndex={index}
+										changeGirl={() => setUpdatePage(!updatePage)}
+										previousImage={item}
 									/>
+									</div>
 								))}
 						</div>
 						</CardContent>
