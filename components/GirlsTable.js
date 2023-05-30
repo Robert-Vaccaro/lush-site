@@ -48,7 +48,7 @@ export default function CollapsibleTable() {
   function Row({row}) {
     const router = useRouter();
     let editButtonClicked = (girlHandle) => {
-      router.push("/spec-girl?girl="+girlHandle)
+      router.push("lush-site/spec-girl?girl="+girlHandle)
     }
 
     return (

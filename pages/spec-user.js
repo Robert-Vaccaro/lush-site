@@ -36,7 +36,7 @@ export default function SpecUser() {
         <div></div>
       ) : (
         <div>
-          <Button size="small" onClick={() => router.push("/dashboard")}>
+          <Button size="small" onClick={() => router.push("lush-site/dashboard")}>
             Back
           </Button>
           <Card sx={{ minWidth: 275 }}>

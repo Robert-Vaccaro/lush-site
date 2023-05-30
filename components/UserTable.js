@@ -1,11 +1,11 @@
 import {useEffect, useState} from 'react';
-import {Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, TablePagination} from '@mui/material'
+import {Box, Collapse, CardMedia, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, TablePagination} from '@mui/material'
 import {KeyboardArrowDown, KeyboardArrowUp, Edit} from '@mui/icons-material'
 import SearchBar from "../components/SearchBar"
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { getCookie } from 'cookies-next';
-import {getUsers} from "../server/UserRoutes"
+import { getUsers } from "../server/UserRoutes"
 //TODO:
   // Add scrolling with lazy loading
 
@@ -47,6 +47,7 @@ export default function CollapsibleTable() {
           <TableRow>
             <TableCell />
             <TableCell>Apple ID</TableCell>
+            <TableCell>Photo</TableCell>
             <TableCell align="right">Username</TableCell>
             <TableCell align="right">First</TableCell>
             <TableCell align="right">Last</TableCell>
@@ -81,7 +82,7 @@ export default function CollapsibleTable() {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     let editButtonClicked = (appleID) => {
-      router.push("/spec-user?user="+appleID)
+      router.push("lush-site/spec-user?user="+appleID)
     }
 
     return (
@@ -98,6 +99,9 @@ export default function CollapsibleTable() {
           </TableCell>
           <TableCell component="th" scope="row">
             {row.appleID}
+          </TableCell>
+          <TableCell component="th" scope="row">
+            <CardMedia component='img' src={`https://gossa-images.s3-us-west-1.amazonaws.com/lush/users/${row.appleID}/profile_photo.jpeg`} sx={{ width: '50px', height: 'auto' }}/>
           </TableCell>
           <TableCell align="right">{row.username}</TableCell>
           <TableCell align="right">{row.firstName}</TableCell>

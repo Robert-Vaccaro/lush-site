@@ -25,7 +25,7 @@ export default function SpecGirl() {
         <div></div>
       ) : (
         <div>
-          <Button size="small" onClick={() => router.push("/girls")}>
+          <Button size="small" onClick={() => router.push("lush-site/girls")}>
             Back
           </Button>
           <Card sx={{ minWidth: 275 }}>
