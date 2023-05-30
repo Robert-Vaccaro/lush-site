@@ -82,7 +82,7 @@ export default function CollapsibleTable() {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     let editButtonClicked = (appleID) => {
-      router.push("lush-site/spec-user?user="+appleID)
+      router.push("spec-user?user="+appleID)
     }
 
     return (

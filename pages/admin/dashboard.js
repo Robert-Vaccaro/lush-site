@@ -1,13 +1,13 @@
-import NavBar from '../components/NavBar'
-import GirlsTable from '../components/GirlsTable'
-export default function Girls() {
+import NavBar from '../../components/NavBar'
+import UserTable from '../../components/UserTable'
+export default function Dashboard() {
   return (
     <div className='usertable-container'>
         <div>
             <NavBar />
         </div>
         <div className='usertable-container'>
-            <GirlsTable />
+            <UserTable />
         </div>
     </div>
   )

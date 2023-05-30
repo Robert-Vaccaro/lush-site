@@ -100,8 +100,8 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {createNewMenuButton('Users', <Group/>, () => router.push('lush-site/dashboard'))}
-          {createNewMenuButton('Girls', <Woman/>, () => router.push('lush-site/girls'))}
+          {createNewMenuButton('Users', <Group/>, () => router.push('dashboard'))}
+          {createNewMenuButton('Girls', <Woman/>, () => router.push('girls'))}
         </List>
       </CustomDrawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}></Box>

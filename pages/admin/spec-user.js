@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {Card, CardActions, CardContent, Button, Typography} from '@mui/material'
 import moment from "moment";
-import ChangePrompt from "../components/ChangePrompt";
-import ChangeResStr from "../components/ChangeResStr";
-import BanUser from "../components/BanUser";
-import {getSpecUser, getSpecUserMessages} from "../server/UserRoutes"
+import ChangePrompt from "../../components/ChangePrompt";
+import ChangeResStr from "../../components/ChangeResStr";
+import BanUser from "../../components/BanUser";
+import {getSpecUser, getSpecUserMessages} from "../../server/UserRoutes"
 
 export default function SpecUser() {
   const router = useRouter();
@@ -36,7 +36,7 @@ export default function SpecUser() {
         <div></div>
       ) : (
         <div>
-          <Button size="small" onClick={() => router.push("lush-site/dashboard")}>
+          <Button size="small" onClick={() => router.push("dashboard")}>
             Back
           </Button>
           <Card sx={{ minWidth: 275 }}>
