@@ -56,8 +56,8 @@ export default function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    fetchData(data.get("username"),data.get("password"))
+    // const data = new FormData(event.currentTarget);
+    fetchData(event.currentTarget.username.value,event.currentTarget.password.value)
   };
   
   return (
