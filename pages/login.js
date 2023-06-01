@@ -1,4 +1,4 @@
-// import {React} from 'react';
+import {useEffect, useState} from 'react';
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
 import { setCookie } from "cookies-next";
-import {loginAdmin} from "../server/UserRoutes"
+import { loginAdmin } from "../server/UserRoutes"
 function Copyright(props) {
   return (
     <Typography
@@ -37,6 +37,8 @@ const theme = createTheme();
 
 export default function Login() {
   const router = useRouter();
+  let [username, setUsername] = useState("");
+  let [password, setPassword] = useState("");
 
   const checkCreds = (username, res) => {
     if (res.message === "Success") {
@@ -44,7 +46,6 @@ export default function Login() {
       setCookie("token", res.token);
       router.push("admin/dashboard");
     } else {
-      //add error here
       console.log(res.message)
     }
   };
@@ -56,8 +57,8 @@ export default function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    fetchData(data.get("username"),data.get("password"))
+    // const data = new FormData(event.currentTarget);
+    fetchData(username,password)
   };
   
   return (
@@ -96,11 +97,13 @@ export default function Login() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <TextField margin="normal" required fullWidth id="username" label="Username" name="username" autoComplete="username" autoFocus/>
-              <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
+            <Box  sx={{ mt: 1 }}>
+              <TextField onChange={(e) => setUsername(e.target
+                .value)} margin="normal" required fullWidth id="username" label="Username" name="username" autoComplete="username" autoFocus/>
+              <TextField onChange={(e) => setPassword(e.target
+                .value)} margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
               <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me"/>
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              <Button type="button" onClick={(e) => handleSubmit(e)} fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                 Sign In
               </Button>
               <Grid container>
