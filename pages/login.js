@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
 import { setCookie } from "cookies-next";
 import { loginAdmin } from "../server/UserRoutes"
+import img from "../images/banner.png"
 function Copyright(props) {
   return (
     <Typography
@@ -42,10 +43,12 @@ export default function Login() {
 
   const checkCreds = (username, res) => {
     if (res.message === "Success") {
+      alert("success")
       setCookie("username", username);
       setCookie("token", res.token);
       router.push("admin/dashboard");
     } else {
+      alert("error: ",res.message)
       console.log(res.message)
     }
   };
@@ -57,6 +60,7 @@ export default function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(event)
     // const data = new FormData(event.currentTarget);
     fetchData(username,password)
   };
@@ -71,7 +75,7 @@ export default function Login() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: "url(https://gossa-images.s3.us-west-1.amazonaws.com/lush/girls/kaili_bae/images/kaili_bae_13.jpg)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -97,7 +101,7 @@ export default function Login() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box  sx={{ mt: 1 }}>
+            <form sx={{ mt: 1 }}>
               <TextField onChange={(e) => setUsername(e.target
                 .value)} margin="normal" required fullWidth id="username" label="Username" name="username" autoComplete="username" autoFocus/>
               <TextField onChange={(e) => setPassword(e.target
@@ -119,7 +123,7 @@ export default function Login() {
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />
-            </Box>
+            </form>
           </Box>
         </Grid>
       </Grid>
