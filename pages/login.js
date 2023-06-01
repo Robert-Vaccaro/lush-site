@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
 import { setCookie } from "cookies-next";
 import { loginAdmin } from "../server/UserRoutes"
-import img from "../images/banner.png"
+
 function Copyright(props) {
   return (
     <Typography
@@ -26,7 +26,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        GF Chatter
+        Lush Virtual
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -43,13 +43,12 @@ export default function Login() {
 
   const checkCreds = (username, res) => {
     if (res.message === "Success") {
-      alert("success")
       setCookie("username", username);
       setCookie("token", res.token);
       router.push(`admin/dashboard`);
     } else {
-      alert("error: ",res.message)
-      console.log(res.message)
+      alert("There was an error logging in")
+      
     }
   };
 
@@ -60,8 +59,6 @@ export default function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event)
-    // const data = new FormData(event.currentTarget);
     fetchData(username,password)
   };
   
