@@ -1,3 +1,10 @@
 .usertable-container{
   display: flex;
 }
+#__next{
+  overflow: hidden;
+}
+body{
+  margin: auto;
+  overflow: hidden;
+}
