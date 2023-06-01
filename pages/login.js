@@ -42,7 +42,7 @@ export default function Login() {
     if (res.message === "Success") {
       setCookie("username", username);
       setCookie("token", res.token);
-      router.push("lush-site/dashboard");
+      router.push("admin/dashboard");
     } else {
       //add error here
       console.log(res.message)

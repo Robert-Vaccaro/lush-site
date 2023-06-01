@@ -42,7 +42,7 @@ export default function Login() {
     if (res.message === "Success") {
       setCookie("username", username);
       setCookie("token", res.token);
-      router.push("dashboard");
+      router.push("admin/dashboard");
     } else {
       //add error here
       console.log(res.message)
@@ -96,7 +96,7 @@ export default function Login() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={(e) => handleSubmit(e)} sx={{ mt: 1 }}>
               <TextField margin="normal" required fullWidth id="username" label="Username" name="username" autoComplete="username" autoFocus/>
               <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password"/>
               <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me"/>
