@@ -46,7 +46,7 @@ export default function Login() {
       alert("success")
       setCookie("username", username);
       setCookie("token", res.token);
-      router.push("admin/dashboard");
+      router.push(`admin/dashboard`);
     } else {
       alert("error: ",res.message)
       console.log(res.message)
