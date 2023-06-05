@@ -4,7 +4,7 @@ import {KeyboardArrowDown, KeyboardArrowUp, Edit} from '@mui/icons-material'
 import SearchBar from "../components/SearchBar"
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
-import { getCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 import { getUsers } from "../server/UserRoutes"
 //TODO:
   // Add scrolling with lazy loading
@@ -25,13 +25,19 @@ export default function CollapsibleTable() {
         setPage(page += 1)
       } else if ((e.target.getAttribute("data-testid") === "KeyboardArrowLeftIcon")) {
         setPage(page -= 1)
-      }      
+      }
+      setCookie("dashboard-page", page)
     }
     var handleChangeRowsPerPage = (e) => {
-      setPerPage(e.target.value)
+      let newVal = e.target.value
+      setPerPage(newVal)
+      setCookie("dashboard-per-page", newVal)
       setPage(0)
+      setCookie("dashboard-page", 0)
     }
     const fetchUsers = async () => {
+      setPerPage(parseInt(getCookie("dashboard-per-page")))
+      setPage(parseInt(getCookie("dashboard-page")))
       const res = await getUsers(searchTerm, page, perPage)
       setUserList(res)
     };

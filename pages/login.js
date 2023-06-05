@@ -45,10 +45,11 @@ export default function Login() {
     if (res.message === "Success") {
       setCookie("username", username);
       setCookie("token", res.token);
+      setCookie("dashboard-page", 0)
+      setCookie("dashboard-per-page", 5)
       router.push(`admin/dashboard`);
     } else {
       alert("There was an error logging in")
-      
     }
   };
 
